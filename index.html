@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写生成 - KAGA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
+</head>
+
+<body id="app" @vue:mounted="mounted()">
+    <div class="container">
+        <div class="container mb-5 mt-5">
+            <div v-for="(item, index) in imgdatas">
+                <img class="img-fluid img-thumbnail" v-bind:src="item">
+            </div>
+        </div>
+        <form action="##" onsubmit="return false" class="row">
+            <div class="mb-4">
+                <textarea class="form-control" rows="3" v-model="text" spellcheck="false"></textarea>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <input type="button" class="btn btn-outline-primary" value="计算中……" disabled v-if="iscalculating" />
+                    <input type="button" class="btn btn-outline-primary" value="生成" id="create" @click="calculate()"
+                        v-else />
+                </div>
+            </div>
+            <div class=""></div>
+            <div class="row col-6 mb-3" v-for="(item, index) in attributes">
+                <div class="input-group col-12">
+                    <span class="input-group-text">{{item.name}}</span>
+                    <input class="form-control" type="number" v-model:value="item.val">
+                </div>
+            </div>
+            <div class="row col-6 mb-3">
+                <div class="input-group col-12">
+                    <label class="input-group-text">{{attributesText.name}}</label>
+                    <input class="form-control" type="text" v-model:value="attributesText.val">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
+        <div class="toast align-items-center text-white" role="alert" aria-live="assertive" aria-atomic="true"
+            id="toast">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">参数错误</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{servererror}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/petite-vue@0.4.1/dist/petite-vue.iife.min.js"></script>
+    <script>
+        const attributeNames = [
+            'width', 'height', 'font_size', 'line_spacing', 'word_spacing',
+            'top_margin', 'bottom_margin', 'left_margin', 'right_margin',
+            'line_spacing_sigma', 'font_size_sigma', 'word_spacing_sigma',
+            'perturb_x_sigma', 'perturb_y_sigma', 'perturb_theta_sigma'
+        ]
+        const attributeNamesChinese = [
+            '宽度', '高度', '字体大小', '行间距', '字间距',
+            '上边距', '底边距', '左边距', '右边距',
+            '行间距扰动', '字体大小扰动', '字间距扰动',
+            '笔画水平扰动', '笔画垂直扰动', '字型角度扰动'
+        ]
+        PetiteVue.createApp({
+            text: "WebHandRight - 手写字体生成",
+            attributes: attributeNames.map((v, i) => PetiteVue.reactive({ name: attributeNamesChinese[i], key: v, val: 0 })),
+            attributesText: PetiteVue.reactive({ name: '句末字符', key: 'end_chars', val: '' }),
+            iscalculating: false,
+            imgdatas: PetiteVue.reactive(['data/default.webp']),
+            servererror: '114514',
+            mymodel: new bootstrap.Modal(document.querySelector('#myModel')),
+            calculate() {
+                this.iscalculating = true;
+                const _data = Object.fromEntries([...this.attributes, this.attributesText].map(a => [a.key, a.val]));
+                const text = this.text;
+                axios({
+                    method: 'post',
+                    url: '/api/run',
+                    data: {
+                        text,
+                        ..._data
+                    }
+                }).then((resp) => {
+                    this.imgdatas.length = resp.data.length;
+                    resp.data.forEach((v, i) => {
+                        this.imgdatas[i] = "data:image/webp;base64," + v;
+                    })
+                }).catch((error) => {
+                    this.servererror = error.response.data;
+                    this.mymodel.show();
+                }).finally(() => {
+                    this.iscalculating = false;
+                })
+            },
+            mounted() {
+                [1000, 160, 50, 60, 10, 50, 50, 50, 50, 5, 4, 4, 2, 2, 0.05].forEach((value, index) => {
+                    this.attributes[index].val = value
+                });
+                this.attributesText.val = '，。';
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
