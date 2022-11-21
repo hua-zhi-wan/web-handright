@@ -19,9 +19,9 @@
         </div>
         <form action="##" onsubmit="return false" class="row">
             <div class="mb-4">
-                <textarea class="form-control shadow-sm" rows="3" v-model="text" spellcheck="false"></textarea>
+                <textarea class="form-control shadow-sm" rows="4" v-model="text" spellcheck="false"></textarea>
             </div>
-            <div class="row mb-4">
+            <div class="mb-4">
                 <div class="col-12">
                     <input type="button" class="btn btn-outline-primary shadow-sm" value="计算中……" disabled
                         v-if="iscalculating" />
@@ -30,16 +30,16 @@
                 </div>
             </div>
             <div class=""></div>
-            <div class="row col-md-6 col-sm-12 mb-3" v-for="(item, index) in attributes">
+            <div class="col-md-6 col-sm-12 mb-3" v-for="(item, index) in attributes">
                 <div class="input-group col-12">
-                    <span class="input-group-text shadow-sm">{{item.name}}</span>
-                    <input class="form-control shadow-sm" type="number" v-model:value="item.val">
+                    <span class="input-group-text">{{item.name}}</span>
+                    <input class="form-control" type="number" v-model:value="item.val">
                 </div>
             </div>
-            <div class="row col-12 mb-3">
+            <div class="col-12 mb-3">
                 <div class="input-group col-12">
-                    <label class="input-group-text shadow-sm">{{attributesText.name}}</label>
-                    <input class="form-control shadow-sm" type="text" v-model:value="attributesText.val">
+                    <label class="input-group-text">{{attributesText.name}}</label>
+                    <input class="form-control" type="text" v-model:value="attributesText.val">
                 </div>
             </div>
         </form>
