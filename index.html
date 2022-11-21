@@ -14,31 +14,32 @@
     <div class="container">
         <div class="container mb-5 mt-5">
             <div v-for="(item, index) in imgdatas">
-                <img class="img-fluid img-thumbnail" v-bind:src="item">
+                <img class="img-fluid img-thumbnail me-2 shadow-sm" v-bind:src="item">
             </div>
         </div>
         <form action="##" onsubmit="return false" class="row">
             <div class="mb-4">
-                <textarea class="form-control" rows="3" v-model="text" spellcheck="false"></textarea>
+                <textarea class="form-control shadow-sm" rows="3" v-model="text" spellcheck="false"></textarea>
             </div>
             <div class="row mb-4">
                 <div class="col-12">
-                    <input type="button" class="btn btn-outline-primary" value="计算中……" disabled v-if="iscalculating" />
-                    <input type="button" class="btn btn-outline-primary" value="生成" id="create" @click="calculate()"
-                        v-else />
+                    <input type="button" class="btn btn-outline-primary shadow-sm" value="计算中……" disabled
+                        v-if="iscalculating" />
+                    <input type="button" class="btn btn-outline-primary shadow-sm" value="生成" id="create"
+                        @click="calculate()" v-else />
                 </div>
             </div>
             <div class=""></div>
-            <div class="row col-6 mb-3" v-for="(item, index) in attributes">
+            <div class="row col-md-6 col-sm-12 mb-3" v-for="(item, index) in attributes">
                 <div class="input-group col-12">
-                    <span class="input-group-text">{{item.name}}</span>
-                    <input class="form-control" type="number" v-model:value="item.val">
+                    <span class="input-group-text shadow-sm">{{item.name}}</span>
+                    <input class="form-control shadow-sm" type="number" v-model:value="item.val">
                 </div>
             </div>
-            <div class="row col-6 mb-3">
+            <div class="row col-12 mb-3">
                 <div class="input-group col-12">
-                    <label class="input-group-text">{{attributesText.name}}</label>
-                    <input class="form-control" type="text" v-model:value="attributesText.val">
+                    <label class="input-group-text shadow-sm">{{attributesText.name}}</label>
+                    <input class="form-control shadow-sm" type="text" v-model:value="attributesText.val">
                 </div>
             </div>
         </form>

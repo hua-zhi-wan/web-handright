@@ -1,3 +1,5 @@
 .vercel
 .server.py
 .http
+
+data/**.ttf
