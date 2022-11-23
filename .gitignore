@@ -3,3 +3,4 @@
 .http
 
 data/**.ttf
+api/__pycache__
