@@ -17,4 +17,4 @@
 
 ## 🛠 开源
 父项目采用 [BSD-3](https://github.com/Gsllchb/Handright/blob/master/LICENSE.txt) 开源协议。  
-本项目采用 [MIT](https://github.com/HanaYabuki/WebHandRight/blob/master/LICENSE) 开源协议。
+本项目采用 [MIT](https://github.com/hua-zhi-wan/WebHandRight/blob/master/LICENSE) 开源协议。
